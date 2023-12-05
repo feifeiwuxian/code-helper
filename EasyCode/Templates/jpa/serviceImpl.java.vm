@@ -1,0 +1,62 @@
+$!{define.vm}
+$!{jpa.vm}
+
+#set($serviceSavePath = $tool.append(${serviceSrcFolder},"/",${serviceImplPackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($serviceImplClassName, ".java"))
+package ${serviceImplPackageName};
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ${servicePackageName}.${serviceClassName};
+import ${crudPackageName}.${crudClassName};
+import ${repositoryPackageName}.${repositoryClassName};
+import ${modelPackageName}.${entityName};
+import ${voPackageName}.${voClassName};
+import ${voPackageName}.${queryDtoClassName};
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Example;
+import java.util.List;
+
+#tableComment("ServiceImpl")
+#set($crudVariableName=$tool.firstLowerCase($crudClassName))
+#set($repositoryVariableName=$tool.firstLowerCase($repositoryClassName))
+@Service
+public class ${serviceImplClassName} implements ${serviceClassName}{
+
+    Logger logger = LoggerFactory.getLogger(${serviceImplClassName}.class);
+
+    @Autowired
+    private ${crudClassName} ${crudVariableName};
+
+    @Autowired
+    private ${repositoryClassName} ${repositoryVariableName};
+
+    @Override
+    public Page<${voClassName}> queryPage(${queryDtoClassName} ${queryDtoClassNamelower}) {
+        return ${repositoryVariableName}.queryPage(${queryDtoClassNamelower});
+    }
+
+    @Override
+    public List<${entityName}> findAll(${entityName} ${entityNameLower}) {
+        return ${repositoryVariableName}.findAll(Example.of(${entityNameLower}));
+    }
+
+    @Override
+    public ${entityName} findById(Long ${pkName}) {
+        return ${crudVariableName}.findById(${pkName});
+    }
+
+    @Override
+    public ${entityName} save(${entityName} ${entityNameLower}) {
+        return ${crudVariableName}.save(${entityNameLower});
+    }
+
+    @Override
+    public void deleteById(Long ${pkName}) {
+        ${crudVariableName}.deleteById(${pkName});
+    }
+}

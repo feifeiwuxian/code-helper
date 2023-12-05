@@ -1,0 +1,91 @@
+
+$!{define.vm}
+$!{jpa.vm}
+
+#set($serviceSavePath = $tool.append(${controllerSrcFolder},"/",${controllerPackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($controllerClassName, ".java"))
+package ${controllerPackageName};
+$!{autoImport.vm}
+import ${servicePackageName}.${serviceClassName};
+import ${voPackageName}.${queryDtoClassName};
+import ${voPackageName}.${voClassName};
+import ${modelPackageName}.${entityName};
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+#tableComment("Controller")
+
+#set($dtoVariableName=$tool.firstLowerCase($dtoClassName))
+@RestController
+@RequestMapping("/${tableNameLower}")
+public class ${controllerClassName} {
+
+    Logger logger = LoggerFactory.getLogger(${controllerClassName}.class);
+
+    @Autowired
+#set($serviceVariableName=$tool.firstLowerCase($serviceClassName))
+    private ${serviceClassName} ${serviceVariableName};
+
+    /**
+    * 分页查询
+    */
+    @PostMapping("/queryPage")
+    public Page<$voClassName> queryPage(@RequestBody ${queryDtoClassName} ${queryDtoClassNamelower}) {
+        if (logger.isInfoEnabled()) {
+            logger.info("queryPage ${tableNameLower}:{}", JSONObject.toJSONString(${queryDtoClassNamelower}));
+        }
+        return ${serviceVariableName}.queryPage(${queryDtoClassNamelower});
+    }
+
+    /**
+    * 查询
+    */
+    @PostMapping("/findAll")
+    public List<${entityName}> findAll(@RequestBody ${entityName} ${entityNameLower}) {
+        if (logger.isInfoEnabled()) {
+            logger.info("findAll ${tableNameLower}:{}", JSONObject.toJSONString(${entityNameLower}));
+        }
+        return ${serviceVariableName}.findAll(${entityNameLower});
+    }
+
+    /**
+     * 根据id查找
+     */
+    @GetMapping("/find/{id}")
+    public ${entityName} findById(@PathVariable("id") Long ${pkName}) {
+        if (logger.isInfoEnabled()) {
+            logger.info("find ${tableNameLower}, ${pkName}:{}", ${pkName});
+        }
+        return ${serviceVariableName}.findById(${pkName});
+    }
+
+    /**
+     * 新增
+     */
+    @PostMapping("/save")
+    public ${entityName} save(@RequestBody ${entityName} ${entityNameLower}) {
+        if (logger.isInfoEnabled()) {
+            logger.info("save ${tableNameLower}:{}", JSONObject.toJSONString(${entityNameLower}));
+        }
+        return ${serviceVariableName}.save(${entityNameLower});
+    }
+
+    /**
+     * 根据id删除
+     */
+    @PostMapping("/delete/{id}")
+    public void deleteById(@PathVariable("id") Long ${pkName}) {
+        if (logger.isInfoEnabled()) {
+            logger.info("delete ${tableNameLower}, ${pkName}:{}", ${pkName});
+        }
+        ${serviceVariableName}.deleteById(${pkName});
+    }
+
+}

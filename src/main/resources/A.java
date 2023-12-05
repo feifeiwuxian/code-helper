@@ -1,0 +1,16 @@
+sql.append(" SELECT ");
+        sql.append("     t.*, scClient.company_name sysClientName, ");
+        sql.append("     scCarry.company_name sysCarryName, ");
+        sql.append("     backup.company_name backupSysCarryName, ");
+        sql.append("     o.owner_name ownerName, ");
+        sql.append("     uul.login_name loginName ");
+        sql.append(" FROM ");
+        sql.append("     us_settle_flow t ");
+        sql.append("     LEFT JOIN us_sys_company scClient ON t.sys_client_id = scClient.sys_company_id ");
+        sql.append("     LEFT JOIN us_sys_company scCarry ON t.sys_carry_id = scCarry.sys_company_id ");
+        sql.append("     LEFT JOIN us_sys_company backup ON t.backup_sys_carry_id = backup.sys_company_id ");
+        sql.append("     LEFT JOIN uo_owner o ON t.owner_id = o.owner_id ");
+        sql.append("     LEFT JOIN uo_owner_user u ON t.owner_id = u.owner_id  AND u.admin_flag = 1  ");
+        sql.append("     LEFT JOIN u_user_login uul ON uul.user_id = u.owner_user_id  ");
+        sql.append(" WHERE ");
+        sql.append("     1=1 ");

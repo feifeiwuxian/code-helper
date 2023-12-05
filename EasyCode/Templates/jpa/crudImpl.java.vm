@@ -1,0 +1,43 @@
+$!{define.vm}
+$!{jpa.vm}
+
+#set($savePath = $tool.append(${serviceSrcFolder},"/",${crudImplPackageName.replace(".","/")}))
+
+$!callback.setSavePath($savePath)
+$!callback.setFileName($tool.append($crudImplClassName, ".java"))
+package ${crudImplPackageName};
+
+import ${modelPackageName}.${entityName};
+import ${repositoryPackageName}.${repositoryClassName};
+import ${crudPackageName}.${crudClassName};
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+#tableComment("CRUD实现类")
+#set($repositoryVariableName=$tool.firstLowerCase($repositoryClassName))
+@Service
+public class ${crudImplClassName} implements ${crudClassName} {
+
+    @Autowired
+    private ${repositoryClassName} ${repositoryVariableName};
+
+    // ----------------基本操作区域-------------开始-------------------
+    public static final String CACHE_NAME = ${entityName}.CACHE_NAME;
+
+    @Override
+    public ${entityName} findById(Long ${pkName}) {
+        return ${repositoryVariableName}.findById(${pkName}).orElse(null);
+    }
+
+    @Override
+    public ${entityName} save(${entityName} ${entityNameLower}) {
+        return ${repositoryVariableName}.save(${entityNameLower});
+    }
+
+    @Override
+    public void deleteById(Long ${pkName}) {
+        ${repositoryVariableName}.deleteById(${pkName});
+    }
+    // ----------------基本操作区域-------------结束-------------------
+
+}

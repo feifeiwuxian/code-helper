@@ -1,0 +1,19 @@
+$!{define.vm}
+$!{jpa.vm}
+
+
+#set($repositorySavePath = $tool.append(${repositorySrcFolder},"/",${repositoryPackageName.replace(".","/")}))
+
+$!callback.setSavePath($repositorySavePath)
+$!callback.setFileName($tool.append($repositoryClassName, ".java"))
+package ${repositoryPackageName};
+import ${modelPackageName}.${entityName};
+import org.springframework.data.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+##import ${repositoryPackageName}.${iRepositoryClassName};
+
+#tableComment("Repository")
+public interface ${repositoryClassName} extends JpaRepository<${entityName}, ${pkType}>, ${iRepositoryClassName} {
+
+
+}

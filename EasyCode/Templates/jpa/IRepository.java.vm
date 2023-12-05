@@ -1,0 +1,20 @@
+$!{define.vm}
+$!{jpa.vm}
+
+
+#set($repositorySavePath = $tool.append(${repositorySrcFolder},"/",${repositoryPackageName.replace(".","/")}))
+
+$!callback.setSavePath($repositorySavePath)
+$!callback.setFileName($tool.append($iRepositoryClassName, ".java"))
+package ${repositoryPackageName};
+
+import ${voPackageName}.${voClassName};
+import ${voPackageName}.${queryDtoClassName};
+import org.springframework.data.domain.Page;
+
+#tableComment("IRepository")
+public interface ${iRepositoryClassName} {
+
+    Page<$voClassName> queryPage(${queryDtoClassName} ${queryDtoClassNamelower});
+
+}

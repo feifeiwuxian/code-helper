@@ -1,0 +1,29 @@
+$!{define.vm}
+$!{jpa.vm}
+
+#set($serviceSavePath = $tool.append(${serviceSrcFolder},"/",${servicePackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($serviceClassName, ".java"))
+package ${servicePackageName};
+
+import ${modelPackageName}.${entityName};
+import ${voPackageName}.${voClassName};
+import ${voPackageName}.${queryDtoClassName};
+import org.springframework.data.domain.Page;
+import java.util.List;
+
+#tableComment("Service")
+public interface ${serviceClassName} {
+
+    Page<${voClassName}> queryPage(${queryDtoClassName} ${queryDtoClassNamelower});
+
+    List<${entityName}> findAll(${entityName} ${entityNameLower});
+
+    ${entityName} findById(Long ${pkName});
+
+    ${entityName} save(${entityName} ${entityNameLower});
+
+    void deleteById(Long ${pkName});
+
+}

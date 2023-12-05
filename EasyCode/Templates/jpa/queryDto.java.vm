@@ -1,0 +1,37 @@
+##导入宏定义
+$!{define.vm}
+$!{jpa.vm}
+
+
+#set($voSavePath = $tool.append(${commonSrcFolder},"/",${voPackageName.replace(".","/")}))
+
+$!callback.setSavePath($voSavePath)
+$!callback.setFileName($tool.append($queryDtoClassName, ".java"))
+##自动导入包（全局变量）
+package ${voPackageName};
+$!{autoImport.vm}
+import java.io.Serializable;
+import com.wbtech.common.vo.BaseQueryVo;
+
+#if(${useLombok})
+import lombok.Data;
+#end
+#if($useSwagger)
+import io.swagger.annotations.ApiModel;
+#end
+#if($useOpenApi)
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+
+#tableComment("查询VO")
+#if(${useLombok})
+@Data
+#end
+#if($useSwagger)
+    @ApiModel(value = "$!{tableInfo.name}" , description = "$!{tableInfo.comment}" )
+#end
+public class $!{queryDtoClassName} extends BaseQueryVo {
+
+    private static final long serialVersionUID = 1L;
+
+}

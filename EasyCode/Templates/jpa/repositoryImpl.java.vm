@@ -1,0 +1,35 @@
+$!{define.vm}
+$!{jpa.vm}
+
+
+#set($repositorySavePath = $tool.append(${repositorySrcFolder},"/",${repositoryImplPackageName.replace(".","/")}))
+
+$!callback.setSavePath($repositorySavePath)
+$!callback.setFileName($tool.append($repositoryImplClassName, ".java"))
+package ${repositoryImplPackageName};
+
+import com.wbtech.common.dao.PageQuery;
+import ${repositoryPackageName}.${iRepositoryClassName};
+import ${voPackageName}.${queryDtoClassName};
+import ${voPackageName}.${voClassName};
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import java.util.ArrayList;
+import java.util.List;
+
+#tableComment("RepositoryImpl")
+public class ${repositoryImplClassName} implements ${iRepositoryClassName} {
+
+    @Autowired
+    PageQuery pageQuery;
+
+    @Override
+    public Page<${voClassName}> queryPage(${queryDtoClassName} ${queryDtoClassNamelower}) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        sql.append(" SELECT * FROM ${tableInfo.obj.name} t ");
+        sql.append(" WHERE 1=1");
+        return pageQuery.query(sql.toString(), args, ${queryDtoClassNamelower}, ${voClassName}.class);
+    }
+
+}

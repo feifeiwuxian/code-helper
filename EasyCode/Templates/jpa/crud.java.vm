@@ -1,0 +1,21 @@
+$!{define.vm}
+$!{jpa.vm}
+
+#set($savePath = $tool.append(${serviceSrcFolder},"/",${crudPackageName.replace(".","/")}))
+
+$!callback.setSavePath($savePath)
+$!callback.setFileName($tool.append($crudClassName, ".java"))
+package ${crudPackageName};
+
+import ${modelPackageName}.${entityName};
+
+#tableComment("CRUD接口")
+public interface ${crudClassName} {
+
+    ${entityName} findById(Long ${pkName});
+
+    ${entityName} save(${entityName} ${entityNameLower});
+
+    void deleteById(Long ${pkName});
+
+}
