@@ -66,9 +66,11 @@ public class CodeHelper {
                     String variableLine;
                     String trimLine = line.trim();
                     if (trimLine.contains("?") && (trimLine.startsWith("and") || trimLine.startsWith("AND")) ) {
-                        variableLine = "    ";
+                        String voGetStr = WFTools.parseAndGenerateGetter(trimLine);
+                        variableLine = "    SqlCreatUtil.append(\" " + trimLine + " \", "+ voGetStr +", sql, args);";
+                    } else {
+                        variableLine = "    sql.append(\" " + trimLine + " \");";
                     }
-                    variableLine = "    sql.append(\" " + trimLine + " \");";
                     bw.write(variableLine);
 //                    bw.write("\r\n");
                     bw.newLine();
@@ -104,6 +106,14 @@ public class CodeHelper {
                     String variableLine = content.substring(typeIndex + 9, content.length() - 3);
                     bw.write(variableLine);
 //                    bw.write("\r\n");
+                    bw.newLine();
+                } else if (content.contains(".append(") && content.startsWith("SqlCreatUtil")) {
+                    // 找到end位置
+                    int endIndex = content.indexOf("\", vo.");
+                    // 删除Type及之前的内容
+                    int typeIndex = content.indexOf(".append(");
+                    String variableLine = content.substring(typeIndex + 9, endIndex);
+                    bw.write(variableLine);
                     bw.newLine();
                 }
             }

@@ -14,7 +14,8 @@ public class Main {
 
 
 //        CodeHelper.convertFile("1.sql", "sql1.java");
-//        CodeHelper.getSqlFile("A.java", "a.sql");
+//        CodeHelper.convertFileV2("1.sql", "sql1.java");
+        CodeHelper.getSqlFile("A.java", "a.sql");
 //        test2();
         BigDecimal bigDecimal = new BigDecimal("1.565454");
         System.out.println("Hello world!");
@@ -38,5 +39,12 @@ public class Main {
         args.add(1);
         System.out.println(sql);
 
+    }
+
+    public static void testQuery(QueryVo vo) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> args = new ArrayList<Object>();
+//        String voGetStr = SqlCreatUtil.parseAndGenerateGetter("commindline");
+//        SqlCreatUtil.append("AND delivery_pay_id = ?", , sql, args);
     }
 }
